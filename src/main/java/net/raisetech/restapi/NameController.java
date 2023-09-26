@@ -5,14 +5,12 @@ import net.raisetech.restapi.DELETE.NameDeleteResponse;
 import net.raisetech.restapi.GET.NameResponse;
 import net.raisetech.restapi.PATCH.NameUpdateRequest;
 import net.raisetech.restapi.PATCH.NameUpdateResponse;
-import net.raisetech.restapi.POST.NameCreateRequest;
 import net.raisetech.restapi.POST.NameCreateResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class NameController {
@@ -20,9 +18,9 @@ public class NameController {
     @GetMapping("/names")
     public List<NameResponse> getNames(@RequestParam("sample") String sample) {
         List<NameResponse> names = List.of(
-                new NameResponse("yuu", "satake"),
-                new NameResponse("aki", "hosokawa"),
-                new NameResponse("moe", "iori"));
+                new NameResponse("yuu", "satake", "takashi", 1),
+                new NameResponse("aki", "hosokawa", "takashi", 2),
+                new NameResponse("moe", "iori", "takashi", 3));
 
 
         return names;
@@ -30,10 +28,10 @@ public class NameController {
     }
 
     @PostMapping("/names")
-    public ResponseEntity<NameCreateResponse> createName(@RequestBody NameCreateRequest nameCreateRequest, UriComponentsBuilder uriComponentsBuilder) {
-        URI uri = uriComponentsBuilder.path("/names/{id}").buildAndExpand(1234).toUri();
-        return ResponseEntity.created(uri).body(new NameCreateResponse("a new name is created"));
+    public ResponseEntity<Map<String, String>> NameCreateResponse(@PathVariable("id") int id, @RequestBody NameCreateResponse nameCreateResponse) {
+        return ResponseEntity.ok(Map.of("message", "name successfully updated"));
     }
+
 
     @PatchMapping("/names/{id}")
     public NameUpdateResponse updateName(@PathVariable("id") String id, @RequestBody NameUpdateRequest nameUpdateRequest) {

@@ -1,10 +1,22 @@
 package net.raisetech.restapi.POST;
 
-public class NameCreateRequest {
-    private String givenName;
-    private String familyName;
-    private String middleName;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.hibernate.validator.constraints.Length;
 
+public class NameCreateRequest {
+    @NotBlank
+    @Length(min = 1, max = 20)
+    private String givenName;
+    @NotBlank
+    @Length(min = 1, max = 20)
+    private String familyName;
+    @NotBlank
+    @Length(min = 1, max = 20)
+    private String middleName;
+    @NotNull
+    @PositiveOrZero
     private int age;
 
 
