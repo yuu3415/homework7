@@ -20,7 +20,7 @@ public class NameController {
         List<NameResponse> names = List.of(
                 new NameResponse("yuu", "satake", "takashi", 1),
                 new NameResponse("aki", "hosokawa", "takashi", 2),
-                new NameResponse("moe", "iori", "takashi", 3));
+                new NameResponse("moyo", "iori", "takashi", 3));
 
 
         return names;
