@@ -5,14 +5,17 @@ import net.raisetech.restapi.DELETE.NameDeleteResponse;
 import net.raisetech.restapi.GET.NameResponse;
 import net.raisetech.restapi.PATCH.NameUpdateRequest;
 import net.raisetech.restapi.PATCH.NameUpdateResponse;
-import net.raisetech.restapi.POST.NameCreateResponse;
+import net.raisetech.restapi.POST.NameCreateRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RestController
+@Validated
 public class NameController {
 
     @GetMapping("/names")
@@ -28,18 +31,24 @@ public class NameController {
     }
 
     @PostMapping("/names")
-    public ResponseEntity<Map<String, String>> NameCreateResponse(@PathVariable("id") int id, @RequestBody NameCreateResponse nameCreateResponse) {
-        return ResponseEntity.ok(Map.of("message", "name successfully updated"));
+    public ResponseEntity<String> create(@RequestBody @Validated NameCreateRequest form) {
+        URI url = UriComponentsBuilder.fromUriString("http://localhost:8080")
+                .path("/users/id")
+                .build()
+                .toUri();
+
+        return ResponseEntity.created(url).body("name successfully created");
     }
 
-
     @PatchMapping("/names/{id}")
-    public NameUpdateResponse updateName(@PathVariable("id") String id, @RequestBody NameUpdateRequest nameUpdateRequest) {
+    public NameUpdateResponse updateName(@PathVariable("id") String id, @RequestBody NameUpdateRequest
+            nameUpdateRequest) {
         return new NameUpdateResponse("a name is updated");
     }
 
     @DeleteMapping("/names/{id}")
-    public NameDeleteResponse deleteName(@PathVariable("id") String id, @RequestBody NameDeleteRequest nameDeleteRequest) {
+    public NameDeleteResponse deleteName(@PathVariable("id") String id, @RequestBody NameDeleteRequest
+            nameDeleteRequest) {
         return new NameDeleteResponse("a name is deleted");
     }
 }

@@ -6,16 +6,16 @@ import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.Length;
 
 public class NameCreateRequest {
-    @NotBlank
+    @NotBlank(message = "givenName is mandatory")
     @Length(min = 1, max = 20)
     private String givenName;
-    @NotBlank
-    @Length(min = 1, max = 20)
+    @NotBlank(message = "familyName is mandatory")
+    @Length(min = 1, max = 20, message = "familyName must be between 1 and 20 characters")
     private String familyName;
-    @NotBlank
+    @NotBlank(message = "middleName is mandatory")
     @Length(min = 1, max = 20)
     private String middleName;
-    @NotNull
+    @NotNull(message = "age is mandatory")
     @PositiveOrZero
     private int age;
 
