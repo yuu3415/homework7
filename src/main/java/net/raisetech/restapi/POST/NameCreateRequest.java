@@ -42,4 +42,20 @@ public class NameCreateRequest {
     public int getAge() {
         return age;
     }
+
+    public void setGivenName(String givenName) {
+        this.givenName = givenName;
+    }
+
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
 }

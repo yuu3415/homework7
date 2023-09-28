@@ -8,6 +8,7 @@ import net.raisetech.restapi.PATCH.NameUpdateResponse;
 import net.raisetech.restapi.POST.NameCreateRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -23,15 +24,35 @@ public class NameController {
         List<NameResponse> names = List.of(
                 new NameResponse("yuu", "satake", "takashi", 1),
                 new NameResponse("aki", "hosokawa", "takashi", 2),
-                new NameResponse("moyo", "iori", "takashi", 3));
+                new NameResponse("moo", "iori", "takashi", 3));
 
 
         return names;
 
     }
 
+    @ControllerAdvice
+    public class MethodArgumentNotValidExceptionHandler {
+
+        @ExceptionHandler(MethodArgumentNotValidException.class)
+        public ResponseEntity<String> handleValidationExceptions(
+                MethodArgumentNotValidException ex) {
+            String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                    .map(x -> x.getDefaultMessage())
+                    .reduce("エラー", (a, b) -> {
+                        if (a.isEmpty()) {
+                            return b;
+                        } else {
+                            return a + ", " + b;
+                        }
+                    });
+
+            return ResponseEntity.badRequest().body(errorMessage);
+        }
+    }
+
     @PostMapping("/names")
-    public ResponseEntity<String> create(@RequestBody @Validated NameCreateRequest form) {
+    public ResponseEntity<String> create(@Validated @RequestBody NameCreateRequest form) {
         URI url = UriComponentsBuilder.fromUriString("http://localhost:8080")
                 .path("/users/id")
                 .build()
@@ -39,6 +60,7 @@ public class NameController {
 
         return ResponseEntity.created(url).body("name successfully created");
     }
+
 
     @PatchMapping("/names/{id}")
     public NameUpdateResponse updateName(@PathVariable("id") String id, @RequestBody NameUpdateRequest
